@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" xmlns="http://www.w3.org/1999/html">
+        <div class="panel panel-primary" style="height: 180px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">运行测试</h3>
+            </div>
+            <div class="panel-body">
+                <button data-href="{% url 'monitor:run_test' %}" class="btn btn-primary" role="button" id="run_test_btn">点击运行</button>
+                <div class="alert alert-success hide" style="margin-top: 10px;" role="alert" id="run_test_alert"></div>
+            </div>
+        </div>
+
+        <div class="panel panel-primary" style="height: 180px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">更新Cookie</h3>
+            </div>
+            <div class="panel-body">
+                <button data-href="{% url 'monitor:once_refresh_cookie' %}" class="btn btn-primary" role="button" id="refresh_cookie_once">立即更新</button>
+                <button data-href="{% url 'monitor:task_refresh_cookie' %}" class="btn btn-primary" role="button" id="refresh_cookie_run_btn">保存运行</button>
+                <button data-href="{% url 'monitor:task_refresh_cookie' %}" class="btn btn-danger" role="button" id="refresh_cookie_stop_btn">点击终止</button>
+                <div class="input-group" id="refresh_cookie_warp" style="float: right;width: 50%;">
+                  <span class="input-group-addon" id="basic-addon3">crontab: 0 10 0 * * * </span>
+                  <input type="text" class="form-control" id="refresh_cookie_cron" aria-describedby="basic-addon3">
+                </div>
+                <div class="alert alert-success hide" style="margin-top: 10px;" role="alert" id="refresh_cookie_alert"></div>
+            </div>
+        </div>
+
+        <div class="panel panel-primary" style="height: 180px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">配置测试</h3>
+            </div>
+            <div class="panel-body">
+                <button data-href="{% url 'monitor:task_run_test' %}" class="btn btn-primary" role="button" id="schedule_test_run_btn">保存运行</button>
+                <button data-href="{% url 'monitor:task_run_test' %}" class="btn btn-danger" role="button" id="schedule_test_stop_btn">点击终止</button>
+                <div class="input-group" id="schedule_warp" style="float: right;width: 50%;">
+                  <span class="input-group-addon" id="basic-addon3">crontab: 0 */20 * * * * </span>
+                  <input type="text" class="form-control" id="schedule_cron" aria-describedby="basic-addon3" value="{{ cron_str }}">
+                </div>
+                <div class="alert alert-success hide" style="margin-top: 10px;" role="alert" id="schedule_test_alert"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        {# 使用Ajax发送Post请求传递参数需要增加以下代码 #}
+        {# ################################################################# #}
+        var csrfToken = Cookies.get('csrftoken');
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrfToken);
+                }
+            }
+        });
+        {# ################################################################# #}
+        {# 单次运行测试AJAX #}
+        var $runBtn=$('#run_test_btn');
+        var $runTestAlert=$('#run_test_alert');
+        $runBtn.on('click',function(){
+            $runTestAlert.removeClass('hide').html('正在运行中...').removeClass('alert-danger').addClass('alert-success');
+            $.ajax({
+                url:$(this).data('href'),
+                type:'get',
+                success:function(){
+                    $runTestAlert.html('<strong>Well done!</strong>测试执行完毕,请查看最新巡检报告.');
+                },
+                error:function(){
+                    $runTestAlert.html('<strong>Error!</strong>运行失败,请检查用例和邮件配置.').removeClass('alert-success').addClass('alert-danger');
+                }
+            });
+        });
+
+        {# 更新Cookie的AJAX #}
+        var $refreshCookieWarp=$('#refresh_cookie_warp');
+        var $refreshCookieOnce=$('#refresh_cookie_once');
+        var $refreshCookieRunBtn=$('#refresh_cookie_run_btn');
+        var $refreshCookieCron=$('#refresh_cookie_cron');
+        var $refreshCookieAlert=$('#refresh_cookie_alert');
+        {# Ajax发送GET请求 #}
+        $refreshCookieOnce.on('click',function(){
+            $refreshCookieAlert.removeClass('hide').html('立即更新Cookie...').removeClass('alert-danger').addClass('alert-success');
+            $.ajax({
+                url:$(this).data('href'),
+                type:'get',
+                success:function(){
+                    $refreshCookieAlert.html('<strong>Well done!</strong>&nbsp;Cookie更新完毕.');
+                },
+                error:function(){
+                    $refreshCookieAlert.html('<strong>Error!</strong>&nbsp;Cookie更新失败.').removeClass('alert-success').addClass('alert-danger');
+                }
+            });
+        });
+
+        {# Ajax发送POST请求 #}
+        $refreshCookieRunBtn.on('click',function(){
+            if(!$refreshCookieCron.val()){
+                $refreshCookieWarp.addClass('has-error');
+                return;     {# 如果没有填写则不提交任何数据 #}
+            }
+            $refreshCookieAlert.removeClass('hide').html('运行更新Cookie任务...').removeClass('alert-danger').addClass('alert-success');
+            var jsonData=JSON.stringify({
+                run_flag:'start_run',
+                run_cron:$refreshCookieCron.val()
+            });
+            $.ajax({
+                url:$(this).data('href'),
+                type:'post',
+                contentType:'application/json',
+                data:jsonData,
+                success:function(){},
+                error:function(){}
+            });
+        });
+        $refreshCookieCron.on('focus',function(){
+            $refreshCookieWarp.removeClass('has-error');
+        });
+
+        var $refresh_cookie_stop_btn=$('#refresh_cookie_stop_btn');
+        $refresh_cookie_stop_btn.on('click',function(){
+            $refreshCookieAlert.removeClass('hide').html('更新Cookie任务终止!').removeClass('alert-success').addClass('alert-danger');
+            var jsonData=JSON.stringify({
+                run_flag:'stop_run'
+            });
+            $.ajax({
+                url:$(this).data('href'),
+                type:'post',
+                contentType:'application/json',
+                data:jsonData,
+                success:function(){},
+                error:function(){}
+            });
+        });
+
+        {# 测试持续运行的AJAX #}
+        var $schedule_warp=$('#schedule_warp');
+        var $scheduleBtn=$('#schedule_test_run_btn');
+        var $scheduleCron=$('#schedule_cron');
+        var $scheduleAlert=$('#schedule_test_alert');
+        $scheduleBtn.on('click',function(){
+            if(!$scheduleCron.val()){
+                $schedule_warp.addClass('has-error');
+                return;     {# 如果没有填写则不提交任何数据 #}
+            }
+            $scheduleAlert.removeClass('hide').html('运行测试任务...').removeClass('alert-danger').addClass('alert-success');
+            var jsonData=JSON.stringify({
+                run_flag:'start_run',
+                run_cron:$scheduleCron.val()
+            });
+            $.ajax({
+                url:$(this).data('href'),
+                type:'post',
+                contentType:'application/json',
+                data:jsonData,
+                success:function(){},
+                error:function(){}
+            });
+        });
+        $scheduleCron.on('focus',function(){
+            $schedule_warp.removeClass('has-error');
+        });
+
+
+        var $scheduleStopBtn=$('#schedule_test_stop_btn');
+        $scheduleStopBtn.on('click',function(){
+            $scheduleAlert.removeClass('hide').html('测试任务终止!').removeClass('alert-success').addClass('alert-danger');
+            var jsonData=JSON.stringify({
+                run_flag:'stop_run'
+            });
+            $.ajax({
+                url:$(this).data('href'),
+                type:'post',
+                contentType:'application/json',
+                data:jsonData,
+                success:function(){},
+                error:function(){}
+            });
+        });
+    </script>
+{% endblock %}

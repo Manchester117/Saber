@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div>
+            <h2 class="reportName">巡检报告</h2>
+            <h3 class="reportCategory">B端</h3>
+            <ul class="reportList">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="info" style="text-align: center">服务器IP</th>
+                            <th class="info" style="text-align: center">系统错误</th>
+                            <th class="info" style="text-align: center">是否超时</th>
+                            <th class="info" style="text-align: center">验证失败</th>
+                            <th class="info" style="text-align: center">测试通过</th>
+                            <th class="info" style="text-align: center">运行时间</th>
+                            <th class="info" style="text-align: center">查看详情</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for status in status_b_list %}
+                        <tr>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.host_ip }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.error_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.time_out_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.failure_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.pass_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.time }}</td>
+                            <td style="vertical-align: middle;text-align: center;">
+                                <a class="btn btn-primary btn-sm" href="response_report/?report_id={{ status.report_id }}&aggregate_id={{ aggregate_id }}&report_name={{ status.report_name }}">超时详情</a>
+                                <a class="btn btn-primary btn-sm" href="detail_report/?report_id={{ status.report_id }}&aggregate_id={{ aggregate_id }}&report_name={{ status.report_name }}">验证详情</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </ul>
+            <h3 class="reportCategory">C端</h3>
+            <ul class="reportList">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="info" style="text-align: center">服务器IP</th>
+                            <th class="info" style="text-align: center">系统错误</th>
+                            <th class="info" style="text-align: center">是否超时</th>
+                            <th class="info" style="text-align: center">验证失败</th>
+                            <th class="info" style="text-align: center">测试通过</th>
+                            <th class="info" style="text-align: center">运行时间</th>
+                            <th class="info" style="text-align: center">查看详情</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for status in status_c_list %}
+                        <tr>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.host_ip }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.error_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.time_out_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.failure_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.pass_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.time }}</td>
+                            <td style="vertical-align: middle;text-align: center;">
+                                <a class="btn btn-primary btn-sm" href="response_report/?report_id={{ status.report_id }}&aggregate_id={{ aggregate_id }}&report_name={{ status.report_name }}">超时详情</a>
+                                <a class="btn btn-primary btn-sm" href="detail_report/?report_id={{ status.report_id }}&aggregate_id={{ aggregate_id }}&report_name={{ status.report_name }}">验证详情</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </ul>
+            <h3 class="reportCategory">H端</h3>
+            <ul class="reportList">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="info" style="text-align: center">服务器IP</th>
+                            <th class="info" style="text-align: center">系统错误</th>
+                            <th class="info" style="text-align: center">是否超时</th>
+                            <th class="info" style="text-align: center">验证失败</th>
+                            <th class="info" style="text-align: center">测试通过</th>
+                            <th class="info" style="text-align: center">运行时间</th>
+                            <th class="info" style="text-align: center">查看详情</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for status in status_h_list %}
+                        <tr>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.host_ip }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.error_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.time_out_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.failure_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.pass_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.time }}</td>
+                            <td style="vertical-align: middle;text-align: center;">
+                                <a class="btn btn-primary btn-sm" href="response_report/?report_id={{ status.report_id }}&aggregate_id={{ aggregate_id }}&report_name={{ status.report_name }}">超时详情</a>
+                                <a class="btn btn-primary btn-sm" href="detail_report/?report_id={{ status.report_id }}&aggregate_id={{ aggregate_id }}&report_name={{ status.report_name }}">验证详情</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </ul>
+            <h3 class="reportCategory">J端</h3>
+            <ul class="reportList">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="info" style="text-align: center">服务器IP</th>
+                            <th class="info" style="text-align: center">系统错误</th>
+                            <th class="info" style="text-align: center">是否超时</th>
+                            <th class="info" style="text-align: center">验证失败</th>
+                            <th class="info" style="text-align: center">测试通过</th>
+                            <th class="info" style="text-align: center">运行时间</th>
+                            <th class="info" style="text-align: center">查看详情</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for status in status_j_list %}
+                        <tr>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.host_ip }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.error_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.time_out_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.failure_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.pass_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.time }}</td>
+                            <td style="vertical-align: middle;text-align: center;">
+                                <a class="btn btn-primary btn-sm" href="response_report/?report_id={{ status.report_id }}&aggregate_id={{ aggregate_id }}&report_name={{ status.report_name }}">超时详情</a>
+                                <a class="btn btn-primary btn-sm" href="detail_report/?report_id={{ status.report_id }}&aggregate_id={{ aggregate_id }}&report_name={{ status.report_name }}">验证详情</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </ul>
+            <h3 class="reportCategory">W端</h3>
+            <ul class="reportList">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="info" style="text-align: center">服务器IP</th>
+                            <th class="info" style="text-align: center">系统错误</th>
+                            <th class="info" style="text-align: center">是否超时</th>
+                            <th class="info" style="text-align: center">验证失败</th>
+                            <th class="info" style="text-align: center">测试通过</th>
+                            <th class="info" style="text-align: center">运行时间</th>
+                            <th class="info" style="text-align: center">查看详情</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for status in status_w_list %}
+                        <tr>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.host_ip }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.error_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.time_out_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.failure_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.pass_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.time }}</td>
+                            <td style="vertical-align: middle;text-align: center;">
+                                <a class="btn btn-primary btn-sm" href="response_report/?report_id={{ status.report_id }}&aggregate_id={{ aggregate_id }}&report_name={{ status.report_name }}">超时详情</a>
+                                <a class="btn btn-primary btn-sm" href="detail_report/?report_id={{ status.report_id }}&aggregate_id={{ aggregate_id }}&report_name={{ status.report_name }}">验证详情</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </ul>
+            <h3 class="reportCategory">M端</h3>
+            <ul class="reportList">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="info" style="text-align: center">服务器IP</th>
+                            <th class="info" style="text-align: center">系统错误</th>
+                            <th class="info" style="text-align: center">是否超时</th>
+                            <th class="info" style="text-align: center">验证失败</th>
+                            <th class="info" style="text-align: center">测试通过</th>
+                            <th class="info" style="text-align: center">运行时间</th>
+                            <th class="info" style="text-align: center">查看详情</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for status in status_m_list %}
+                        <tr>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.host_ip }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.error_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.time_out_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.failure_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.pass_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.time }}</td>
+                            <td style="vertical-align: middle;text-align: center;">
+                                <a class="btn btn-primary btn-sm" href="response_report/?report_id={{ status.report_id }}&aggregate_id={{ aggregate_id }}&report_name={{ status.report_name }}">超时详情</a>
+                                <a class="btn btn-primary btn-sm" href="detail_report/?report_id={{ status.report_id }}&aggregate_id={{ aggregate_id }}&report_name={{ status.report_name }}">验证详情</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </ul>
+            <h3 class="reportCategory">R端</h3>
+            <ul class="reportList">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="info" style="text-align: center">服务器IP</th>
+                            <th class="info" style="text-align: center">系统错误</th>
+                            <th class="info" style="text-align: center">是否超时</th>
+                            <th class="info" style="text-align: center">验证失败</th>
+                            <th class="info" style="text-align: center">测试通过</th>
+                            <th class="info" style="text-align: center">运行时间</th>
+                            <th class="info" style="text-align: center">查看详情</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for status in status_r_list %}
+                        <tr>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.host_ip }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.error_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.time_out_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.failure_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.pass_num }}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{ status.time }}</td>
+                            <td style="vertical-align: middle;text-align: center;">
+                                <a class="btn btn-primary btn-sm" href="response_report/?report_id={{ status.report_id }}&aggregate_id={{ aggregate_id }}&report_name={{ status.report_name }}">超时详情</a>
+                                <a class="btn btn-primary btn-sm" href="detail_report/?report_id={{ status.report_id }}&aggregate_id={{ aggregate_id }}&report_name={{ status.report_name }}">验证详情</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+

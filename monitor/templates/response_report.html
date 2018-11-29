@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div>
+            <h2 class="reportName">超时详情</h2>
+            <a href="../detail_report/?report_name={{ report_name }}&report_id={{ report_id }}&aggregate_id={{ aggregate_id }}">
+                <h3 class="reportCategory">返回验证详情</h3>
+            </a>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th class="info" style="vertical-align: middle;text-align: center">用例名称</th>
+                        <th class="info" style="vertical-align: middle;text-align: center">步骤名称</th>
+                        <th class="info" style="vertical-align: middle;text-align: center">请求url</th>
+                        <th class="info" style="vertical-align: middle;text-align: center">响应时间(毫秒)</th>
+                        <th class="info" style="vertical-align: middle;text-align: center">请求时间</th>
+                        <th class="info" style="vertical-align: middle;text-align: center">响应状态</th>
+                        <th class="info" style="vertical-align: middle;text-align: center">是否超时</th>
+                        <th class="info" style="vertical-align: middle;text-align: center">查看响应正文</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for response_info in response_info_list %}
+                    <tr>
+                        <td style="vertical-align:middle">{{ response_info.model_name }}</td>
+                        <td style="vertical-align:middle">{{ response_info.item_name }}</td>
+                        <td style="word-break: break-all">{{ response_info.url }}</td>
+                        <td style="vertical-align: middle;text-align: center;font-weight: bold;}">{{ response_info.resp_duration }}</td>
+                        <td style="vertical-align: middle;text-align: center">{{ response_info.req_time }}</td>
+                        <td style="vertical-align: middle;text-align: center;font-weight: bold;">{{ response_info.status_code }}</td>
+                        <td style="vertical-align: middle;text-align: center;font-weight: bold;">{{ response_info.is_timeout }}</td>
+                        <td style="vertical-align: middle;text-align: center">
+                            <a class="btn btn-primary btn-sm" href="../response_content/?resp_status_id={{ response_info.id }}&aggregate_id={{ aggregate_id }}">响应内容</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

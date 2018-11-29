@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div id="container" class="clearfix">
+        <div style="margin:45px 0 20px 20.5%;" class="col-md-9 ta_r">
+            <form class="form-inline" action="{% url 'monitor:agency_error_type' %}" method="post">
+                {# 提交表单需要使用csrf_token #}
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>起始日期</label>
+                    <div class='input-group date' id='form_date_begin'>
+                        <input type='text' class="form-control" id="begin_date" name="begin_date_str" value="{{ begin_date_str }}" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>结束日期</label>
+                    <div class='input-group date' id='form_date_end'>
+                        <input type='text' class="form-control" id="end_date" name="end_date_str" value="{{ end_date_str }}" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-default">提交</button>
+            </form>
+        </div>
+        <div id="svg_container" style="height: 640px;margin:0 0 20px 20.5%;" class="col-md-9"></div>
+    </div>
+
+    <script>
+        var chart = new Highcharts.chart('svg_container', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '线上各端错误类型统计'
+            },
+            subtitle: {
+                text: 'B端/C端/H端/J端/W端/M端--默认1周'
+            },
+            xAxis: {
+                categories: {{ agency_list | safe }},
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '数量(个)'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.0f} 个</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: '404 Client Error',
+                data: {{ list_404 }}
+
+            }, {
+                name: 'Timeout Error',
+                data: {{ list_timeout }}
+
+            },{
+                name: '502 Server Error',
+                data: {{ list_502 }}
+
+            },{
+                name: 'Unknown Error',
+                data: {{ unknown_error_list }}
+
+            }]
+        });
+    </script>
+    <script type='text/javascript'>
+        {# 日期控件JS #}
+        $('#form_date_begin').datetimepicker({
+            minView: 'month',
+            format: 'yyyy-mm-dd',
+            language: 'zh-CN',
+            autoclose: true,
+            todayBtn: true,
+            pickerPosition: "bottom-left"
+        });
+        {# 日期控件JS #}
+        $('#form_date_end').datetimepicker({
+            minView: 'month',
+            format: 'yyyy-mm-dd',
+            language: 'zh-CN',
+            autoclose: true,
+            todayBtn: true,
+            pickerPosition: "bottom-left"
+        });
+    </script>
+{% endblock %}

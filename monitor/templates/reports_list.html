@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <h3 class="sub-header">历史记录</h3>
+        <form class="form-inline" action="{% url 'monitor:aggregate_list' %}" method="post">
+            {# 提交表单需要使用csrf_token #}
+            {% csrf_token %}
+            <div class="form-group">
+                <label>ID</label>
+                <input type="text" class="form-control" id="aggregate_id" name="aggregate_id" value="{{ aggregate_id }}">
+            </div>
+
+            <div class="form-group">
+                <label>日期</label>
+                <div class='input-group date' id='form_date'>
+                    <input type='text' class="form-control" id="create_date" name="create_date" value="{{ create_date }}" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>是否出错</label>
+                <input type="hidden" value="{{ is_error }}" id="hidden_is_error"/>
+                <select class="form-control" id="is_error" name="is_error">
+                    <option value="">-----</option>
+                    <option value="true">是</option>
+                    <option value="false">否</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-default">搜索</button>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>创建时间</th>
+                        <th>是否出错</th>
+                        <th>成功总数</th>
+                        <th>错误总数</th>
+                        <th>失败总数</th>
+                        <th>查看</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for aggregate_item in aggregates_list %}
+                        {% if aggregate_item.is_error %}
+                            <tr class="danger">
+                                <td>{{ aggregate_item.id }}</td>
+                                <td>{{ aggregate_item.batch_run_time|date:'Y-m-d H:i:s' }}</td>
+                                <td>有</td>
+                                <td>{{ aggregate_item.pass_total_num }}</td>
+                                <td>{{ aggregate_item.error_total_num }}</td>
+                                <td>{{ aggregate_item.failure_total_num }}</td>
+                                <td>
+                                    <a href="../..?aggregate_id={{ aggregate_item.id }}" class="glyphicon glyphicon-zoom-in" title="查看"></a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr class="success">
+                                <td>{{ aggregate_item.id }}</td>
+                                <td>{{ aggregate_item.batch_run_time|date:'Y-m-d H:i:s' }}</td>
+                                <td>无</td>
+                                <td>{{ aggregate_item.pass_total_num }}</td>
+                                <td>{{ aggregate_item.error_total_num }}</td>
+                                <td>{{ aggregate_item.failure_total_num }}</td>
+                                <td>
+                                    <a href="../..?aggregate_id={{ aggregate_item.id }}" class="glyphicon glyphicon-zoom-in" title="查看"></a>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!--分页-->
+        <div class="pagination pagination-right col-xs-12">
+            <ul id="paginator"></ul>
+        </div>
+    </div>
+
+    <script type='text/javascript'>
+        {# var hidden_is_error_value = $('#hidden_is_error').val(); #}
+        {# 下拉菜单值保存 #}
+        $('#is_error').val($('#hidden_is_error').val());
+
+        {# 分页JS #}
+        var options = {
+            bootstrapMajorVersion: 3,
+            currentPage: {{ page_no }},
+            totalPages: {{ num_pages }},
+            pageUrl: function(type, page, current) {
+                 return '?page_no=' + page + '&aggregate_id=' + $('#aggregate_id').val() + '&create_date=' + $('#create_date').val() + '&is_error=' + $('#is_error').val();
+            },
+            size:'normal',
+            alignment:'right'
+        };
+        $('#paginator').bootstrapPaginator(options);
+
+        {# 日期控件JS #}
+        $('#form_date').datetimepicker({
+            minView: 'month',
+            format: 'yyyy-mm-dd',
+            language: 'zh-CN',
+            autoclose: true,
+            todayBtn: true,
+            pickerPosition: "bottom-left"
+        });
+    </script>
+{% endblock %}

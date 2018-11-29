@@ -1,0 +1,57 @@
+{% load staticfiles %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Saber线上巡检系统</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'monitor/css/bootstrap.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'monitor/css/dashboard.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'monitor/css/bootstrap-datetimepicker.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'monitor/css/bootstrap-fileinput.css' %}"/>
+    <script src="{% static 'monitor/js/jquery-3.3.1.js' %}"></script>
+    <script src="{% static 'monitor/js/js.cookie.js' %}"></script>
+    <script src="{% static 'monitor/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'monitor/js/bootstrap-paginator.js' %}"></script>
+    <script src="{% static 'monitor/js/bootstrap-datetimepicker.js' %}"></script>
+    <script src="{% static 'monitor/js/bootstrap-datetimepicker.zh_CN.js' %}"></script>
+    <script src="{% static 'monitor/js/bootstrap-fileinput.js' %}"></script>
+    <script src="{% static 'monitor/js/bootstrap-fileinput_zh_CN.js' %}"></script>
+    <script src="https://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+    <script src="https://cdn.hcharts.cn/highcharts/modules/exporting.js"></script>
+    <script src="https://cdn.hcharts.cn/highcharts/themes/dark-unica.js"></script>
+	<script src="https://cdn.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+{#    <script src="https://cdn.hcharts.cn/highcharts/themes/grid-light.js"></script>#}
+{#    <script src="https://cdn.hcharts.cn/highcharts/themes/sand-signika.js"></script>#}
+
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <span class="navbar-brand logo" href="#">Saber线上巡检系统</span>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <h5>监控结果</h5>
+                <ul class="nav nav-sidebar">
+                    <li><a href="{% url 'monitor:index' %}">巡检报告</a></li>
+                    <li><a href="{% url 'monitor:aggregate_list' %}">历史记录</a></li>
+                    <li><a href="{% url 'monitor:agency_aggregate_num' %}">各端统计</a></li>
+                    <li><a href="{% url 'monitor:agency_error_type' %}">错误类型</a></li>
+                    <li><a href="{% url 'monitor:agency_machine_statistic' %}">机器统计</a></li>
+                </ul>
+                <h5>运行操作</h5>
+                <ul class="nav nav-sidebar">
+                    <li><a href="{% url 'monitor:cases_list' %}">用例列表</a></li>
+                    <li><a href="{% url 'monitor:test_operate' %}">测试操作</a></li>
+                </ul>
+            </div>
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>

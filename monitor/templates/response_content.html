@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div>
+            <h2 class="reportName">响应内容</h2>
+            <a class="btn btn-primary pull-right" style="margin-bottom: 10px" href="../..?aggregate_id={{ aggregate_id }}">返回当前汇总报告</a>
+            <textarea rows="35" class="form-control" readonly="readonly">{{ resp_content }}</textarea>
+        </div>
+    </div>
+{% endblock %}

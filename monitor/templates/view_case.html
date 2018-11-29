@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" xmlns="http://www.w3.org/1999/html">
+        <h3 class="sub-header">用例浏览</h3>
+        <textarea name="" id="" rows="35" class="form-control" readonly="readonly">{{ case_content }}</textarea>
+        <form action="../cases_list/?page_no={{ page_no }}" method="post" class="text-center mt_20">
+            {% csrf_token %}    {# 提交表单需要使用csrf_token--跨域请求 #}
+            <input type="hidden" name="case_name" value="{{ case_name }}"/>
+            <button type="submit" class="btn btn-primary">返回用例列表</button>
+        </form>
+    </div>
+{% endblock %}

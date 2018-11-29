@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" xmlns="http://www.w3.org/1999/html">
+        <h3 class="sub-header">用例列表</h3>
+        <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#upload_modal">上传测试用例</button>
+        <form class="form-inline" action="{% url 'monitor:cases_list' %}" method="post">
+            {% csrf_token %}    {# 提交表单需要使用csrf_token--跨域请求 #}
+            <div class="form-group">
+                <label>用例名称</label>
+                <input type="text" class="form-control" id="case_name" name="case_name" value="{{ case_name }}"/>
+            </div>
+            <button type="submit" class="btn btn-default">搜索</button>
+        </form>
+
+        {# 模态框-上传用例 #}
+        <div class="modal fade" id="upload_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="top:185px;">   {# 定义模态框出现的高度 #}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            上传测试用例
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <form enctype="multipart/form-data" action="{% url 'monitor:upload_case' %}" method="post">
+                            {% csrf_token %}    {# 提交表单需要使用csrf_token--跨域请求 #}
+                            <label class="control-label">选择用例</label>
+                            <input id="upload_case" name="upload_case" multiple type="file" class="file file-loading" data-allowed-file-extensions='["xml"]'>
+                        </form>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>用例名称</th>
+                        <th>创建时间</th>
+                        <th>用例操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for case in case_list %}
+                        <tr>
+                            <td>{{ case.case_name }}</td>
+                            <td>{{ case.case_time|date:"Y年m月d日 H:i:s" }}</td>
+                            <td>
+                                <a class="btn btn-info btn-sm"
+                                   href="../case_view/?case_id={{ case.id }}&page_no={{ page_no }}&num_pages={{ num_pages }}&case_name={{ case_name }}"
+                                   role="button"
+                                   id="view_case">
+                                    &nbsp;&nbsp;查看&nbsp;&nbsp;
+                                </a>
+                                <button class="btn btn-danger btn-sm del_btn" data-toggle="modal" data-target="#del_case_modal" data-case-id="{{ case.id }}">
+                                    &nbsp;&nbsp;删除&nbsp;&nbsp;
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!--分页-->
+        <div class="pagination pagination-right col-xs-12">
+            <ul id="paginator"></ul>
+        </div>
+    </div>
+
+    {# 模态框-删除用例提示 #}
+    <div class="modal fade" id="del_case_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="top:185px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        是否要删除当前测试用例?
+                    </h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <a class="btn btn-primary btn-danger" role="button" id="del_confirm_btn">删除</a>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <script type='text/javascript'>
+        {# 分页JS #}
+        var options = {
+            bootstrapMajorVersion: 3,
+            currentPage: {{ page_no }},
+            totalPages: {{ num_pages }},
+            pageUrl: function(type, page, current) {
+                 return '?page_no=' + page + '&case_name=' + $('#case_name').val();
+            },
+            size:'normal',
+            alignment:'right'
+        };
+        $('#paginator').bootstrapPaginator(options);
+
+        {# 上传按钮-中文显示 #}
+        var upload_case_options = {
+            language : 'zh'
+        };
+        $("#upload_case").fileinput(upload_case_options);
+
+        {# 传递待删除的id--模态框 #}
+        $('.del_btn').on('click', function(){
+            $('#del_confirm_btn').attr('href','../delete_case/?case_id=' + $(this).data('case-id'));
+        });
+    </script>
+{% endblock %}

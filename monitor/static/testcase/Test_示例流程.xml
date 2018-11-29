@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestSuite name="首页">
+    <TestCase>
+        <title>示例_1</title>
+        <data>
+            <url>http://www.saber.cn/zw_Java.html</url>
+            <method>get</method>
+            <getParams/>
+            <postParams/>
+            <json/>
+            <headers/>
+            <cookies>
+                <cookie name="SeekerInfo">_o_c_n_=xxxx</cookie>
+                <cookie name="UserStatus">UserStatus=yyyy</cookie>
+            </cookies>
+        </data>
+        <corrParams>
+            <corrParam name="jobid">a href="/job/(h\d+|b\d+).html</corrParam>
+        </corrParams>
+		<waitSeconds/>
+        <verify>
+            <check name="isContain">Java</check>
+        </verify>
+    </TestCase>
+    <TestCase>
+        <title>示例_2</title>
+        <data>
+            <url>http://www.saber.cn/{jobid}.html</url>
+            <method>get</method>
+            <getParams/>
+            <postParams/>
+            <json/>
+            <headers>
+                <header name="User-Agent">Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko</header>
+                <header name="Host">www.saber.cn</header>
+            </headers>
+            <cookies>
+                <cookie name="SeekerInfo">_o_c_n_=xxxx</cookie>
+                <cookie name="UserStatus">UserStatus=yyyy</cookie>
+            </cookies>
+        </data>
+        <corrParams/>
+		<waitSeconds/>
+        <verify>
+            <check name="isContain">立即申请</check>
+        </verify>
+    </TestCase>
+</TestSuite>
